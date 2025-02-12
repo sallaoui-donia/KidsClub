@@ -1,0 +1,172 @@
+    
+
+ <?php
+	session_start();
+	include('../config/connexion.php');
+
+?>
+
+
+
+<html lang="fr">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+<meta name="viewport" content="width-device-width, initial-scale=1">
+<link rel="icon" href="../../system/images/logo_adm.png" type="image/png">
+<title>IE</title>
+
+<link rel="stylesheet" type="text/css" href="../../system/css/style1.css" />
+<link rel="stylesheet" type="text/css" href="../../system/css/menu.css" />
+
+<style type="text/css">
+table {
+	font-family: verdana,arial,sans-serif;
+	font-size:12px;
+	color:#333333;
+	border-color: #666666;
+    width:100%;
+}s
+
+ td {
+    text-align: left;
+    border-bottom: 2px solid #ddd;  
+}
+ tr:nth-child(even) {background-color: #f2f2f2;}
+</style>
+
+
+</head>
+
+<body >
+    
+<p>Bonjour <?php echo $_SESSION['nom_prenom']; ?></p>
+
+       
+
+<div id="menuadmn" >
+
+		<div class="titre_adm">
+		<img src="../../system/images/logo_adm.png" style="float:left;"><p>ESPACE<Br> Gérant</p>
+		</div>
+		<hr class="ligne">
+		<h4 style="margin:10px;">INTERFACE</h4>
+		<div  class="menuvert">
+			<nav class="vertical">
+		<ul>
+	<li><a href="membre.php">Acceuil </a></li>
+		<li><a href="clubsG.php"> Gérer Club</a></li>
+		<li><a href="mes_clubs.php"> Mes demandes </a></li>
+		</ul>
+		</div>
+		<hr class="ligne">
+		<h4 style="margin:10px;">ADDONS</h4>
+		<div  class="menuvert">
+			<nav class="vertical">
+		<ul>
+		<li><a href="mail_membre.php">Contacter </a></li>
+		</ul>
+		</div>
+		<hr class="ligne">
+		<div  class="menuvert">
+			<nav class="vertical">
+		<ul>
+		<li><a href="../config/log_aout.php">Deconnexion</a></li>
+		</ul>
+		</div>
+		<hr class="ligne">
+
+</div>
+			
+		<hr class="ligne">
+
+</div>
+<div id="mainadmin">
+	<div id="recherche">
+	  <form name="form1" method="post" action="">
+	   
+			          <div style=" float:right; margin:0px;">
+	    	           <img src="../../system/images/logo11.png" width="200" height="49">
+	  				</div>
+      </form>
+	</div>
+
+
+
+	<h3 style="font-size:36px; text-align:center;"><span>ORGANISEZ</span> <span style="color:#007bff ; font-size:36px; text-align:center;">VOTRE CLUB MAINTENANT :  </span></h3>
+<div id="centhh">
+			<h4 class="h4">LISTE DE CLUBS :</h4> 
+
+    
+						<table width="100%" border="0"  class="gridtable">
+			  <tr class="table">
+				
+				<td width="top">nom</td>
+				<td width="top">Date de Creation</td>
+				<td width="top">Adresse </td>
+				<td width="top">Ville </td>
+				
+				<td width="top">Objective </td>
+				<td width="top">prix </td>
+				<td width="top">nom_Activite </td>
+				<td width="top">type_Activite</td>
+                  <td width="top"> image</td>
+				 <?php
+								require_once('../config/connexion.php');
+								if (isset($_GET["page"])) { $page  = $_GET["page"]; } else { $page=1; };
+								$start_from = ($page-1) * 6;
+								$result = $connexion->prepare("SELECT * FROM club WHERE validation ='2'  LIMIT $start_from, 6");
+								$result->execute();
+								for($i=0; $row = $result->fetch(); $i++){
+								$id=$row['id'];
+				?>
+			  </tr>
+			  <tr>
+				
+				<td><?php echo $row['nom']; ?></td>
+				<td><?php echo $row['date_creation']; ?></td>
+				<td><?php echo $row['adresse']; ?></td>
+				<td><?php echo $row['ville']; ?></td>
+				<td><?php echo $row['objective']; ?></td>
+				<td><?php echo $row['prix']; ?></td>
+				<td><?php echo $row['nom_Activite']; ?></td>
+				<td><?php echo $row['type_Activite']; ?></td>
+				
+				<td><img src="../../<?php echo $row['image']; ?>"  style="width:120px; height:70px;"/></td>
+							   <?php } ?>
+			</table>
+			<div id="pagination">
+				<?php 
+			
+				$result = $connexion->prepare("SELECT COUNT(id) FROM  club");
+				$result->execute(); 
+				$row = $result->fetch(); 
+				$total_records = $row[0]; 
+				$total_pages = ceil($total_records / 6); 
+				  
+				for ($i=1; $i<=$total_pages; $i++) { 
+							echo "<a href='membre.php?page=".$i."'";
+							if($page==$i)
+							{
+							echo "id=active";
+							}
+							echo ">";
+							echo "".$i."</a> "; 
+				}; 
+				?>
+			</div>
+
+  </div>
+		
+	
+	</div>
+
+</div>
+        	
+    
+    
+</body>
+</html>
+
+
+
